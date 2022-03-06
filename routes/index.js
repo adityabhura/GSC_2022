@@ -195,13 +195,19 @@ router.post("/add/:id", ensureAuthenticated, async (req, res) => {
   const reg = req.body.registration;
   const name = req.body.name;
   const spec = req.body.specialization;
+  const patient_no = req.body.max_patient_no;
   console.log(req.body);
 
   hospital.findById(req.params.id, (err, hospital) => {
     if (err) throw err;
     else {
       Doctor.create(
-        { registration: reg, name: name, specialization: spec },
+        {
+          registration: reg,
+          name: name,
+          specialization: spec,
+          Max_no_of_patient: patient_no,
+        },
         (err, data) => {
           if (err) throw err;
           else {
