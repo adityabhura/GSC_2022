@@ -23,7 +23,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account</h1>
                             </div>
-                            <form class="user" action="/hospitalRegister" method="POST">
+                            <form class="user" action="/patientRegister" method="POST">
                               <% if(typeof err != 'undefined'){%>
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                   <span style="font-weight:300; font-size:15px"><%=err%></span>
@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     
                                         <input type="text" class="form-control form-control-user" id="exampleFirstName" name="name" value="<%= typeof name != 'undefined' ? name : '' %>"
-                                            placeholder="Enter Hospital Name">
+                                            placeholder="Enter patient Name">
                                 </div>
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-user" id="exampleInputEmail" name="email" value="<%= typeof email != 'undefined' ? email : '' %>"
@@ -72,7 +72,7 @@
                                 <hr>
                             </form>
                             <div class="text-center">
-                                <a class="small" href="/hospitalLogin">Already have an account? Login!</a>
+                                <a class="small" href="/patientLogin">Already have an account? Login!</a>
                             </div>
                             <!-- <div class="text-center">
                               <a class="small" href="/adminlogin">Login As Admin</a>

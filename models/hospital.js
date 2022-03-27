@@ -5,10 +5,25 @@ const hospitalSchema = new mongoose.Schema({
         required: true
     },
 
-    location : {
+    address : {
         type: String,
         required: true
-    },
+      },
+      
+      city : {
+        type: String,
+        required: true
+      },
+      
+      state : {
+        type: String,
+        required: true
+      },
+      
+      pin : {
+        type: Number,
+        required: true
+      },
 
     email : {
         type: String,

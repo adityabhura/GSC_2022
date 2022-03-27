@@ -3,6 +3,7 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const hospital = require("../models/hospital.js");
+const patient = require("../models/patient.js");
 const Doctor = require("../models/doctor.js");
 const passport = require("passport");
 const session = require("express-session");
@@ -53,8 +54,8 @@ router.get("/", (req, res) => {
 });
 
 router.post("/hospitalRegister", (req, res) => {
-  let { name, email, location, password, confirmPassword } = req.body;
-  if (!name || !email || !password || !confirmPassword || !location) {
+  let { name, email, address,city,state,pin, password, confirmPassword } = req.body;
+  if (!name || !email || !password || !confirmPassword || !address || !city || !state || !pin) {
     err = "Please fill all the fields";
     res.render("hospitalRegister", { err: err });
   }
@@ -65,7 +66,10 @@ router.post("/hospitalRegister", (req, res) => {
       email: email,
       name: name,
       password: password,
-      location: location,
+      address:address,
+      city:city,
+      state:state,
+      pin:pin
     });
   }
   if (typeof err == "undefined") {
@@ -84,7 +88,10 @@ router.post("/hospitalRegister", (req, res) => {
               name,
               email,
               password,
-              location,
+              address,
+              city,
+              state,
+              pin
             }).save((err, data) => {
               if (err) throw err;
               req.flash("success_message", "Please Login to Continue");
@@ -116,6 +123,108 @@ passport.use(
   })
 );
 
+
+/*=======Patient Login=======*/
+
+router.get("/b", (req, res) => {
+  res.render("patientRegister");
+});
+
+router.post("/patientRegister", (req, res) => {
+  let { name, email, address,city,state,pin, password, confirmPassword } = req.body;
+  if (!name || !email || !password || !confirmPassword || !address || !city || !state || !pin) {
+    err = "Please fill all the fields";
+    res.render("patientRegister", { err: err });
+  }
+  if (password != confirmPassword) {
+    err = "Passwords dont match";
+    res.render("patientRegister", {
+      err: err,
+      email: email,
+      name: name,
+      password: password,
+      address:address,
+      city:city,
+      state:state,
+      pin:pin
+    });
+  }
+  if (typeof err == "undefined") {
+    patient.findOne({ email: email }, function (err, data) {
+      if (err) throw err;
+      if (data) {
+        err = "Patient already registered";
+        res.render("patientRegister", { name: name, err: err });
+      } else {
+        bcrypt.genSalt(10, (err, salt) => {
+          if (err) throw err;
+          bcrypt.hash(password, salt, (err, hash) => {
+            if (err) throw err;
+            password = hash;
+            patient({
+              name,
+              email,
+              password,
+              address,
+              city,
+              state,
+              pin
+            }).save((err, data) => {
+              if (err) throw err;
+              req.flash("success_message", "Please Login to Continue");
+              console.log(data);
+              res.redirect("/patientlogin");
+            });
+          });
+        });
+      }
+    });
+  }
+});
+
+var localStrategy = require("passport-local").Strategy;
+passport.use(
+  "patient",
+  new localStrategy({ usernameField: "email" }, (email, password, done) => {
+    patient.findOne({ email: email }, (err, data) => {
+      if (err) throw err;
+      if (!data) {
+        return done(null, false, { message: "Patient Not Registered" });
+      }
+      bcrypt.compare(password, data.password, (err, match) => {
+        if (err) return done(null, false);
+        if (!match)
+          return done(null, false, { message: "Password is Incorrect" });
+        if (match) return done(null, data);
+      });
+    });
+  })
+);
+
+router.get("/patientlogin", (req, res) => {
+  res.render("patientLogin");
+});
+
+router.post("/patientLogin", (req, res, next) => {
+  passport.authenticate("patient", {
+    failureRedirect: "/patientLogin",
+    successRedirect: "/patientDashboard",
+    failureFlash: true,
+  })(req, res, next);
+});
+
+router.get("/patientDashboard", (req, res) => {
+  console.log(req.user.city + " got")
+  db.collection("hospitals").find({city:new RegExp(req.user.city,"i")}).toArray(function(err,data){
+    console.log(data);
+    res.render("patientDashboard",{hospitals:data});
+  })
+ 
+});
+
+
+/*=======Patient Login End=========*/
+
 passport.serializeUser(function (user, cb) {
   cb(null, user.id);
 });
@@ -124,14 +233,18 @@ passport.deserializeUser(function (id, cb) {
   hospital.findById(id, function (err, user) {
     if (err) cb(err);
     if (user) cb(null, user);
-    // else{
-    //     admin.findById(id, function(err,user){
-    //         if(err) cb(err);
-    //         cb(null,user);
-    //     })
-    // }
+    else{
+        patient.findById(id, function(err,user){
+            if(err) cb(err);
+            cb(null,user);
+        })
+    }
   });
 });
+
+router.get("/c",(req,res)=>{
+  res.send("Success");
+})
 
 router.get("/hospitallogin", (req, res) => {
   res.render("hospitalLogin");
