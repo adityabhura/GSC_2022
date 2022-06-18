@@ -8,6 +8,8 @@ const bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 dotenv.config();
 
+// MONGO_URI=mongodb+srv://rekhav:rekhav123@cluster0.fj0hh.mongodb.net/appointment?retryWrites=true&w=majority
+
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

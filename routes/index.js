@@ -215,9 +215,19 @@ router.post("/patientLogin", (req, res, next) => {
 
 router.get("/patientDashboard", (req, res) => {
   console.log(req.user.city + " got")
-  db.collection("hospitals").find({city:new RegExp(req.user.city,"i")}).toArray(function(err,data){
-    console.log(data);
-    res.render("patientDashboard",{hospitals:data});
+  // db.collection("hospitals").find({city:new RegExp(req.user.city,"i")}).toArray(function(err,data){
+
+
+  //   console.log(data);
+  //   res.render("patientDashboard",{hospitals:data});
+  // })
+  hospital.find({city:req.user.city}).populate({path:"doctors",model:Doctor}).exec(function(err,data){
+    if(err)res.send(err);
+    else{
+      console.log(data);
+      res.send(data);
+      // res.render("patientDashboard",{hospitals:data});
+    }
   })
  
 });
