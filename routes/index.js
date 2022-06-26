@@ -49,7 +49,11 @@ router.use(bodyParser.json());
 router.use(express.json());
 router.use(express.urlencoded());
 
-router.get("/", (req, res) => {
+router.get("/",(req,res)=>{
+  res.render("landingPage");
+});
+
+router.get("/hospitalRegister", (req, res) => {
   res.render("hospitalRegister");
 });
 
@@ -126,7 +130,7 @@ passport.use(
 
 /*=======Patient Login=======*/
 
-router.get("/b", (req, res) => {
+router.get("/patientRegister", (req, res) => {
   res.render("patientRegister");
 });
 
