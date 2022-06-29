@@ -1,24 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
     <script src="https://kit.fontawesome.com/1966a3f118.js" crossorigin="anonymous"></script>
-    <link rel = "stylesheet" href="../styles.css" type="text/css">
+    <link rel="stylesheet" href="../styles.css" type="text/css">
     <title>Register</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #17a2b8;
+            --dark-color: #343a40;
+            --light-color: #f4f4f4;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            background-color: rgb(182, 194, 180);
+            color: rgb(43, 34, 34);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+
+        /* Utilities */
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 2rem;
+            margin-top: 6rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Text Styles*/
+        .x-large {
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .large {
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .lead {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-primary {
+            color: var(--primary-color);
+        }
+
+        .text-dark {
+            color: var(--dark-color);
+        }
+
+        /* Padding */
+        .p {
+            padding: 0.5rem;
+        }
+
+        .p-1 {
+            padding: 1rem;
+        }
+
+        .p-2 {
+            padding: 2rem;
+        }
+
+        .p-3 {
+            padding: 3rem;
+        }
+
+        .py {
+            padding: 0.5rem 0;
+        }
+
+        .py-1 {
+            padding: 1rem 0;
+        }
+
+        .py-2 {
+            padding: 2rem 0;
+        }
+
+        .py-3 {
+            padding: 3rem 0;
+        }
+
+        /* Margin */
+        .m {
+            margin: 0.5rem;
+        }
+
+        .m-1 {
+            margin: 1rem;
+        }
+
+        .m-2 {
+            margin: 2rem;
+        }
+
+        .m-3 {
+            margin: 3rem;
+        }
+
+        .my {
+            margin: 0.5rem 0;
+        }
+
+        .my-1 {
+            margin: 1rem 0;
+        }
+
+        .my-2 {
+            margin: 2rem 0;
+        }
+
+        .my-3 {
+            margin: 3rem 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--light-color);
+            color: #333;
+            padding: 0.4rem 1.3rem;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            transition: opacity 0.2s ease-in;
+            outline: none;
+        }
+
+        .btn-primary,
+        .bg-primary,
+        .badge-primary,
+        .alert-primary {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .bg-light,
+        .badge-light {
+            border: #ccc solid 1px;
+        }
+
+
+
+        /* Forms */
+        .form .form-group {
+            margin: 1.2rem 0;
+        }
+
+        .form .form-text {
+            display: block;
+            margin-top: 0.3rem;
+            color: #888;
+        }
+
+        .form input[type='text'],
+        .form input[type='email'],
+        .form input[type='password'],
+        .form input[type='date'],
+        .form input[type='number'],
+        .form select,
+        .form textarea {
+            display: block;
+            width: 100%;
+            padding: 0.4rem;
+            font-size: 1.2rem;
+            border: 1px solid #ccc;
+        }
+
+        .form input[type='submit'],
+        button {
+            font: inherit;
+        }
+
+
+
+        /* Mobile Styles */
+        @media (max-width: 700px) {
+            .container {
+                margin-top: 8rem;
+            }
+
+            .hide-sm {
+                display: none;
+            }
+
+            /* Text Styles */
+            .x-large {
+                font-size: 3rem;
+            }
+
+            .large {
+                font-size: 2rem;
+            }
+
+            .lead {
+                font-size: 1rem;
+            }
+
+
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container">
+    <!-- <div class="container">
 
         <div class="card o-hidden border-0 shadow-lg my-5" style="left:22%;width:500px;">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <!-- <div class="col-lg-5 d-none d-lg-block bg-register-image"></div> -->
-                    <div class="col-lg-12">
+            <div class="card-body p-0"> -->
+    <!-- Nested Row within Card Body -->
+    <!-- <div class="row"> -->
+    <!-- <div class="col-lg-5 d-none d-lg-block bg-register-image"></div> -->
+    <!-- <div class="col-lg-12">
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account</h1>
@@ -73,16 +306,60 @@
                             </form>
                             <div class="text-center">
                                 <a class="small" href="/patientLogin">Already have an account? Login!</a>
-                            </div>
-                            <!-- <div class="text-center">
+                            </div> -->
+    <!-- <div class="text-center">
                               <a class="small" href="/adminlogin">Login As Admin</a>
                             </div> -->
-                        </div>
+    <!-- </div>
                     </div>
                 </div>
             </div>
         </div>
 
-    </div>
+    </div> -->
+
+    <section class="container">
+        <h1 class="large text-primary">Sign Up</h1>
+        <p class="lead"><i class="fas fa-user"></i> Create Your Account</p>
+        <form class="form">
+            <div class="form-group">
+                <input type="text" placeholder="Enter patient name" name="name" id="exampleFirstName"
+                    value="<%= typeof name != 'undefined' ? name : '' %>" required />
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="Email Address" name="email" id="exampleInputEmail"
+                    value="<%= typeof email != 'undefined' ? email : '' %>" />
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Address" name="address" id="exampleInputLocation"
+                    value="<%= typeof address != 'undefined' ? address : '' %>" required />
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="City" name="city" id="exampleInputLocation"
+                    value="<%= typeof city != 'undefined' ? city : '' %>" required />
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="State" name="state" id="exampleInputLocation"
+                    value="<%= typeof state != 'undefined' ? state : '' %>" required />
+            </div>
+            <div class="form-group">
+                <input type="number" placeholder="Pin code" name="pincode" id="exampleInputLocation"
+                    value="<%= typeof pin != 'undefined' ? pin : '' %>" required />
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Set password" name="password" minLength="6"
+                    value="<%= typeof password != 'undefined' ? password : '' %>" id="exampleInputPassword" />
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Confirm Password" name="password2" minLength="6"
+                    value="<%= typeof password2 != 'undefined' ? password2 : '' %>" id="exampleRepeatPassword" />
+            </div>
+            <input type="submit" class="btn btn-primary" value="Register" />
+        </form>
+        <p class="my-1">
+            Already have an account? <a href="/patientLogin">Sign In</a>
+        </p>
+    </section>
 </body>
+
 </html>
