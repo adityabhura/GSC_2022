@@ -1,0 +1,18 @@
+<% hospitals.forEach(function(hospital){ %>
+    <div>
+        <h1><%= hospital.name %></h1>
+        Address: <%= hospital.address %>, <%= hospital.city %>
+        <ol>
+        <% hospital.doctors.forEach(function(doctor){ %>
+            <li>
+            <p>Name: <%= doctor.name %></p>
+            <p>Specialization: <%= doctor.specialization %></p>
+            <!-- <p><%= doctor.Max_no_of_patient %></p> -->
+            <form action="/book/?doctor_id=<%=doctor._id%>&hospital_id=<%=hospital._id%>" method="POST">
+                <button>Book</button>
+            </form>
+            </li>
+        <%})%>
+    </ol>
+    </div>
+<% }) %>
