@@ -10,6 +10,7 @@
   <title>Dashboard</title>
 </head>
 <body>
+    <a href="/patient_bookings/<%=user._id%>">See Booking History</a>
     <% hospitals.forEach(function(hospital){ %>
         <div>
             <h1><%= hospital.name %></h1>
@@ -20,9 +21,21 @@
                 <p>Name: <%= doctor.name %></p>
                 <p>Specialization: <%= doctor.specialization %></p>
                 <!-- <p><%= doctor.Max_no_of_patient %></p> -->
-                <form action="/book/?doctor_id=<%=doctor._id%>&hospital_id=<%=hospital._id%>" method="POST">
-                    <button>Book</button>
-                </form>
+                    <% if(doctor.available==true){ %>
+                        <% if(doctor.check_max_patient==true){ %>
+                            <button disabled>Booking Closed</button>
+                        <% }else{ %>
+                            <form action="/book/?doctor_id=<%=doctor._id%>&hospital_id=<%=hospital._id%>" method="POST">
+                                <button>Book</button>
+                            </form>
+                        <% } %>
+                    <% }else{ %>
+                        Doctor NA Tommorow
+                    <% } %>
+                    
+
+                
+                
                 </li>
             <%})%>
         </ol>

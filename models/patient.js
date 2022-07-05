@@ -34,6 +34,19 @@ pin : {
   type: Number,
   required: true
 },
+booking_info:[{
+  booking_date:{
+    type:String
+  },
+  visiting_date:{
+    type:String
+  },
+  doctor_info:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "doctor"
+    }
+}
+]
 
 });
 

@@ -1,0 +1,19 @@
+
+        <ol>
+            <% patient.booking_info.forEach(function(booking){%>
+                <li>
+                    <h4>Booking Date: <%= booking.booking_date %></h4>
+                    <h4>Visiting Date: <%= booking.visiting_date %></h4>
+                    <h4>Doctor's Name: <%= booking.doctor_info.name %></h4>
+                    <h4>Doctor's Specialization: <%= booking.doctor_info.specialization %></h4>
+                    <h4>Hospital Name: <%= booking.doctor_info.hospital.name %></h4>
+                    <h4>Hospital Address: <%= booking.doctor_info.hospital.address %>, 
+                                          <%= booking.doctor_info.hospital.city %>,
+                                          <%= booking.doctor_info.hospital.state %>,
+                                        </h4>
+                </li>
+            <% }) %>
+        </ol>
+
+
+

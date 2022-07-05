@@ -43,26 +43,17 @@ const hospitalSchema = new mongoose.Schema({
     ],
 
     //Overall report
-    patient_complete_record:[
-      {
-        date:{
-          type:Date
-        },
-        info:[
-          {
-            doctor_info:{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Doctor"
-            },
-            patient_info:[
-              {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Patient"
-              }
-            ]
-          }
-        ]
-      }
+    complete_record:[{
+      date:{
+        type:Date
+      },
+      record_id:[
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Record"
+        }
+      ]
+    }
     ],
 
     //Daily report i.e. tommowrow's booking
@@ -70,18 +61,10 @@ const hospitalSchema = new mongoose.Schema({
       date:{
         type:Date
       },
-      info:[
+      record_id:[
         {
-          doctor_info:{
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "Doctor"
-          },
-          patient_info:[
-            {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "Patient"
-            }
-          ]
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Record"
         }
       ]
     }
