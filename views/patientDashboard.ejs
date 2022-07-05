@@ -8,24 +8,128 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <script src="https://kit.fontawesome.com/1966a3f118.js" crossorigin="anonymous"></script>
   <title>Dashboard</title>
+  <style>
+    #search_bar{
+        position: absolute;
+        width: 369px;
+        height: 56px;
+        left: 325px;
+        top: 12px;
+        /* border-radius: 40px;
+        border: 1px solid #6249F2; */
+        box-sizing: border-box;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+
+        color: #6249F2;
+    }
+    .hospital{
+width: 1300px;
+height: 108px;
+left: 163px;
+border: 1px solid #6249F2;
+border-radius: 10px;
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    }
+    .nav-btn{
+        position: absolute;
+width: 190px;
+height: 41px;
+left: 940px;
+top: 16px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 20px;
+line-height: 12px;
+/* or 60% */
+
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #6249F2;
+    }
+    .nav-btn1{
+        position: absolute;
+width: 190px;
+height: 41px;
+left: 1070px;
+top: 16px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 20px;
+line-height: 12px;
+/* or 60% */
+
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #6249F2;
+    }
+    
+  </style>
 </head>
 <body>
-    <% hospitals.forEach(function(hospital){ %>
-        <div>
-            <h1><%= hospital.name %></h1>
-            Address: <%= hospital.address %>, <%= hospital.city %>
-            <ol>
-            <% hospital.doctors.forEach(function(doctor){ %>
-                <li>
-                <p>Name: <%= doctor.name %></p>
-                <p>Specialization: <%= doctor.specialization %></p>
-                <!-- <p><%= doctor.Max_no_of_patient %></p> -->
-                <form action="/book/?doctor_id=<%=doctor._id%>&hospital_id=<%=hospital._id%>" method="POST">
-                    <button>Book</button>
-                </form>
-                </li>
+    <nav class="navbar navbar-expand navbar-light bg-white">
+        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/search" method="GET">
+            <div id="search_bar">
+                <input type="text" id="dsearch" name="dsearch" class="form-control border-1  small" style="border-radius: 40px; color:#6249F2; border-color: #6249F2;" placeholder="Search Hospital"
+                    aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn" style="color:#6249F2" type="submit">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <li class="nav-btn">Appointment</li>
+        <li class="nav-btn1">Profile</li>
+        
+    </nav>
+    
+    
+    <div class="container" style="margin-top:50px;">
+        <div class="row mx-5 my-5 py-5 px-5">
+            <% hospitals.forEach(function(hospital){%>
+                <div class="hospital" style="margin-bottom: 20px;">
+                    <div class="card-body">
+                        <p class="card-text" style="font-size:16.5px; align-items: center; justify-items:center; justify-content: center;"><%=hospital.name%></p>  
+                        <p class="card-text" style="font-size:16.5px; align-items:center; justify-items:center; justify-content:center"><%=hospital.address%></p>
+                    </div>
+            
+                </div>
             <%})%>
-        </ol>
         </div>
-    <% }) %>
+    </div>
+
+    
 </body>
+<!-- <% hospitals.forEach(function(hospital){ %> -->
+    <!-- <div> -->
+        <!-- <h1><%= hospital.name %></h1> -->
+        <!-- Address: <%= hospital.address %>, <%= hospital.city %> -->
+        <!-- <ol> -->
+        <!-- <% hospital.doctors.forEach(function(doctor){ %> -->
+            <!-- <li> -->
+            <!-- <p>Name: <%= doctor.name %></p> -->
+            <!-- <p>Specialization: <%= doctor.specialization %></p> -->
+            <!-- <p><%= doctor.Max_no_of_patient %></p> -->
+            <!-- <form action="/book/?doctor_id=<%=doctor._id%>&hospital_id=<%=hospital._id%>" method="POST"> -->
+                <!-- <button>Book</button> -->
+            <!-- </form> -->
+            <!-- </li> -->
+        <!-- <%})%> -->
+    <!-- </ol> -->
+    <!-- </div> -->
+<!-- <% }) %> -->
