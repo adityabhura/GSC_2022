@@ -25,11 +25,6 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(__dirname));
 
-app.use(function (req, res, next) {
-  res.locals.user = req.user;
-  next();
-});
-
 app.use(express.json());
 app.use(express.urlencoded());
 
@@ -37,6 +32,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(methodOverride("_method"));
+
+app.use(function(req,res,next){
+  res.locals.currentUser=req.user;
+  next();
+});
 
 app.use("/", require("./routes/index"));
 // app.use('/doctor', require('./routes/doctor'));

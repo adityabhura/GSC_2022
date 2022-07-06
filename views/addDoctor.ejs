@@ -3591,15 +3591,6 @@ input[type="button"].btn-block {
   border-bottom-left-radius: 0;
 }
 
-.custom-control {
-  position: relative;
-  z-index: 1;
-  display: block;
-  min-height: 1.5rem;
-  padding-left: 1.5rem;
-  -webkit-print-color-adjust: exact;
-  color-adjust: exact;
-}
 
 .custom-control-inline {
   display: inline-flex;
@@ -11378,7 +11369,6 @@ form.user .form-control-user {
                       <h3 class="h5 text-gray-900 mb-4">Add New Doctor</h3>
                     </div>
                     <hr>
-                    <%=user._id%>
                     <form action="/add/<%=user._id%>" method="POST"  class="user">
                       <% if(typeof err != 'undefined'){%>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">

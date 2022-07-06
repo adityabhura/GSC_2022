@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/1966a3f118.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        #search_bar{
+        /* position: absolute; */
+        width: 109px;
+        height: 56px;
+        margin-left: 225px;
+        top: 12px;
+        /* border-radius: 40px;
+        border: 1px solid #6249F2; */
+        box-sizing: border-box;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+
+        color: #6249F2;
+    }
+    </style>
+</head>
+<body>
+    <navbar class="navbar navbar-expand">
+        <nav class="navbar navbar-expand navbar-light bg-white">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/search" method="GET">
+                <div id="search_bar">
+                    <input type="text" id="dsearch" name="dsearch" class="form-control border-1  small" style="border-radius: 40px; color:#6249F2; border-color: #6249F2;" placeholder="Search Doctors"
+                        aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn" style="color:#6249F2" type="submit">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"> <a href="/patientDashboard" style="text-decoration: none; color:#6249F2; margin-left:550px;">Dashboard</a></li>
+                <li class="nav-item"><a href="/patient_bookings/<%=user._id%>" style="text-decoration: none; color:#6249F2; margin-left:50px;">My Appointments</a></li>
+            </ul>
+            
+        </nav>
+    </navbar>
+    <div class="container mx-5 px-0 my-0 py-0">
+        <div class="row mx-0 my-0 py-0 px-0">
+            <% hospitals.doctors.forEach(function(doctor){%>
+                <div class="col-md-3 my-0 py-0 mx-0" style="padding-left:150px;">
+                    <div class="card shadow" style="width:252px; height:187.16px; margin:15px;">
+                      <div class="card-body">
+                        <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Name:  <%=doctor.name%></p>  
+                        <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Specialization:  <%=doctor.specialization%></p>  
+                        <% if(doctor.available==true){ %>
+                            <% if(doctor.check_max_patient==true){ %>
+                                <button class="btn btn-primary" disabled>Booking Closed</button>
+                            <% }else{ %>
+                                <!-- <form action="/book/?doctor_id=<%=doctor._id%>&hospital_id=<%=hospitals._id%>&patient_id=<%=user._id%>" method="POST">
+                                    <button class="btn btn-primary">Book</button>
+                                </form> -->
+                                <!-- <script>
+                                    var amount=500;
+                                    var doctorName = '<%-doctor.name%>';
+                                    var doctorId = '<%-doctor._id%>';
+                                    var hospitalId = '<%-hospitals._id%>';
+                                    var patientId = '<%-user._id%>';
+
+                                    axios.post(`/createOrder/${amount}`).then((info)=>{
+                                                 console.log(info);
+                                                    var options = {
+                                                "key": "rzp_test_KG5yP9YHvwOFVh",
+                                                "name": `${doctorName}`,
+                                                "description": "Ebook",
+                                                "order_id": info.data.id,
+                                                "callback_url": `/isComplete/${doctorId}/${hospitalId}/${patientId}`,
+                                                "theme":{ "color": "#2e59d9"}
+                                                };
+                                                var rzp1 = new Razorpay(options);
+                                                document.getElementById('btn-rent').onclick=function(e){
+                                                    rzp1.open();
+                                                    e.preventDefault();
+                                                }
+                                                })
+                                </script> -->
+                                <button class="btn btn-primary" id="btn-rent" onclick="func('<%-doctor.name%>','<%-doctor._id%>','<%-hospitals._id%>','<%-user._id%>')">Book</button>
+                            <% } %>
+                        <% }else{ %>
+                            <h1>Doctor NA Tommorow</h1>
+                        <% } %>
+                      </div>
+                    </div>
+                </div>
+            <%})%>
+        </div>
+<script>
+    const amount=500;
+    const func = (doctorName,doctorid,hospitalid,patientid)=>{
+            axios.post(`/createOrder/${amount}`).then((info)=>{
+                console.log(info);
+                var options = {
+            "key": "rzp_test_KG5yP9YHvwOFVh",
+            "name": `${doctorName}`,
+            "description": "Appointment",
+            "order_id": info.data.id,
+            "callback_url": `/isComplete/${doctorid}/${hospitalid}/${patientid}`,
+            "theme":{ "color": "#2e59d9"}
+            };
+            var rzp1 = new Razorpay(options);
+                rzp1.open();
+                e.preventDefault();
+            });
+    }
+</script>
+</body>
+</html>

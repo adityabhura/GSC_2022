@@ -46,32 +46,44 @@
             </ul>
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="#">Doctors</a>
-              </li>
-              <li class="nav-item" >
-                <a class="nav-link" href="#">Appointments</a>
+                <a class="nav-link" href="/hospitalDashboard">Dashboard</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Notifications</a>
+                <a class="nav-link" href="/doctor/add/<%=user._id%>">Add Doctor</a>
+              </li>
+              <li class="nav-item" >
+                <a class="nav-link" href="/hospital_booking">Appointments</a>
               </li>
             </ul>
             
           </div>
         </div>
     </nav>
-    <div class="container" style="margin:10px; margin-top:20px;">
+    <!-- <div class="container" style="margin:10px; margin-top:20px; border-radius:50%;">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-sm" style="border: 1px dotted black; width:130px; height:130px;"><a href="/doctor/add/<%=user._id%>">Add New Doctor</a></button>
+                <button class="btn btn-sm" style="border: 1px dotted black; width:130px; height:130px;"><a href="/doctor/add/<%=user._id%>">+</a></button>
             </div>
            
         </div>
         
-    </div>
-    <h3><%=user.doctors%></h3>
-     <% user.doctors.forEach(function(x){ %>
-        <h4><%=x.name%>,<%=x.Max_no_of_patient%>,<%=x.specialization%></h4>
-        <% }) %>
+    </div> -->
+    <div class="container mx-5 px-0 my-0 py-0">
+      <div class="row mx-0 my-0 py-0 px-0">
+          <% user.doctors.forEach(function(doctor){%>
+              <div class="col-md-3 my-0 py-0 mx-0" style="padding-left:150px;">
+                  <div class="card" style="width:272px; height:227.16px; margin:15px;">
+                    <div class="card-body">
+                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Name:  <%=doctor.name%></p>  
+                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Specialization:  <%=doctor.specialization%></p>  
+                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Patients:  <%=doctor.Max_no_of_patient%></p>
+                      <button class="btn btn-primary btn-sm btn-user"><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Delete</a></button>
+                      <button class="btn btn-primary btn-sm btn-user"><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Update</a></button>
+                    </div>
+                  </div>
+              </div>
+          <%})%>
+      </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

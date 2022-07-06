@@ -2390,21 +2390,21 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  background-color: #6249F2;
+  border-color: #6249F2;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
+  background-color: #6249F2;
+  border-color: #6249F2;
 }
 
 .btn-primary:focus, .btn-primary.focus {
   color: #fff;
   background-color: #2e59d9;
   border-color: #2653d4;
-  box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
+  box-shadow: 0 0 0 0.2rem rgb(118, 150, 248);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -2749,14 +2749,14 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-success {
-  color: #1cc88a;
-  border-color: #1cc88a;
+  color: #6249F2;
+  border-color: #6249F2;
 }
 
 .btn-outline-success:hover {
   color: #fff;
-  background-color: #1cc88a;
-  border-color: #1cc88a;
+  background-color: #6249F2;
+  border-color: #6249F2;
 }
 
 .btn-outline-success:focus, .btn-outline-success.focus {
@@ -3585,8 +3585,8 @@ input[type="button"].btn-block {
   display: block;
   min-height: 1.5rem;
   padding-left: 1.5rem;
-  -webkit-print-color-adjust: exact;
-  color-adjust: exact;
+  /* -webkit-print-color-adjust: exact;
+  color-adjust: exact; */
 }
 
 .custom-control-inline {

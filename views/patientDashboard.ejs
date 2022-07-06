@@ -31,7 +31,7 @@
     }
     .hospital{
 width: 1300px;
-height: 108px;
+height: 70px;
 left: 163px;
 border: 1px solid #6249F2;
 border-radius: 10px;
@@ -61,7 +61,7 @@ color: #6249F2;
         position: absolute;
 width: 190px;
 height: 41px;
-left: 1070px;
+left: 1110px;
 top: 16px;
 
 font-family: 'Inter';
@@ -77,7 +77,20 @@ text-align: center;
 
 color: #6249F2;
     }
-    
+    .view_btn{
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position:absolute;
+            top:25px;
+            left:887px;
+            color: #FFFFFF;
+    }
   </style>
 </head>
 <body>
@@ -93,7 +106,7 @@ color: #6249F2;
                 </div>
             </div>
         </form>
-        <li class="nav-btn">Appointment</li>
+        <li class="nav-btn"> <a href="/patient_bookings/<%=user._id%>" style="text-decoration: none; color:#6249F2;">My Appointments</a></li>
         <li class="nav-btn1">Profile</li>
         
     </nav>
@@ -104,32 +117,28 @@ color: #6249F2;
             <% hospitals.forEach(function(hospital){%>
                 <div class="hospital" style="margin-bottom: 20px;">
                     <div class="card-body">
-                        <p class="card-text" style="font-size:16.5px; align-items: center; justify-items:center; justify-content: center;"><%=hospital.name%></p>  
-                        <p class="card-text" style="font-size:16.5px; align-items:center; justify-items:center; justify-content:center"><%=hospital.address%></p>
+                        <!-- <div class="card-text" style=" margin-bottom:5px;font-size:16.5px; align-items: center; justify-items:center; justify-content: center;"><%=hospital.name%></div>   -->
+                        <div class="card-text" style="font-size:16.5px; align-items:center; justify-items:center; justify-content:center">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <%=hospital.name%>
+                                </div>
+                                <div class="col-md-4">
+                                    <%=hospital.address%>
+                                </div>
+                                <div class="col-md-5" style="padding-left:210px;">
+                                    <div class="view" style="margin:0px; width: 170px; height: 40px; border-radius: 48px;background: #6249F2;"><h3 class="view_btn"><a href="/doctor/view/<%=hospital._id%>" style="text-decoration: none; color:white;">View Doctors</a></h3></div>
+                                </div>
+                                <!-- <div class="col-md-3">
+                                    <div class="view" style="margin:0px; width: 120px; height: 40px; border-radius: 48px;background: #6249F2;">Add</div>
+                                </div> -->
+                            </div>
+                            <!-- <li style="list-style:none;"><div class="view" style="margin:0px; width: 120px; height: 40px; border-radius: 48px;background: #6249F2;">Add</div></li> -->
+                        </div>
                     </div>
             
                 </div>
             <%})%>
         </div>
     </div>
-
-    
 </body>
-<!-- <% hospitals.forEach(function(hospital){ %> -->
-    <!-- <div> -->
-        <!-- <h1><%= hospital.name %></h1> -->
-        <!-- Address: <%= hospital.address %>, <%= hospital.city %> -->
-        <!-- <ol> -->
-        <!-- <% hospital.doctors.forEach(function(doctor){ %> -->
-            <!-- <li> -->
-            <!-- <p>Name: <%= doctor.name %></p> -->
-            <!-- <p>Specialization: <%= doctor.specialization %></p> -->
-            <!-- <p><%= doctor.Max_no_of_patient %></p> -->
-            <!-- <form action="/book/?doctor_id=<%=doctor._id%>&hospital_id=<%=hospital._id%>" method="POST"> -->
-                <!-- <button>Book</button> -->
-            <!-- </form> -->
-            <!-- </li> -->
-        <!-- <%})%> -->
-    <!-- </ol> -->
-    <!-- </div> -->
-<!-- <% }) %> -->

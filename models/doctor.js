@@ -4,7 +4,10 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+  hospital:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Hospital"
+  },
   specialization: {
     type: String,
     required: true,
@@ -24,10 +27,23 @@ const doctorSchema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
-  availaible:{
+  available:{
     type:Boolean,
     default:true
+  },
+  booked_info:[{
+    booking_date:{
+      type:String
+    },
+    visiting_date:{
+      type:String
+    },
+    patient_info:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Patient"
+      } 
   }
+  ]
 });
 
 module.exports = mongoose.model("Doctor", doctorSchema, "doctor");
