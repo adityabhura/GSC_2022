@@ -29,11 +29,6 @@ state : {
   type: String,
   required: true
 },
-
-pin : {
-  type: Number,
-  required: true
-},
 booking_info:[{
   booking_date:{
     type:String

@@ -19,26 +19,6 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <!-- <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li> -->
-              <!-- <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li> -->
-              <!-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li> -->
-              <!-- <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-              </li> -->
               <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
@@ -54,31 +34,26 @@
               <li class="nav-item" >
                 <a class="nav-link" href="/hospital_booking">Appointments</a>
               </li>
+              <li class="nav-item" >
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
             </ul>
             
           </div>
         </div>
     </nav>
-    <!-- <div class="container" style="margin:10px; margin-top:20px; border-radius:50%;">
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-sm" style="border: 1px dotted black; width:130px; height:130px;"><a href="/doctor/add/<%=user._id%>">+</a></button>
-            </div>
-           
-        </div>
-        
-    </div> -->
     <div class="container mx-5 px-0 my-0 py-0">
       <div class="row mx-0 my-0 py-0 px-0">
           <% user.doctors.forEach(function(doctor){%>
               <div class="col-md-3 my-0 py-0 mx-0" style="padding-left:150px;">
-                  <div class="card" style="width:272px; height:227.16px; margin:15px;">
+                  <div class="card" style="width:303px; height:327.16px; margin:15px; border:none;">
+                    <img src="<%=doctor.image%>" style="width:170px; height:170px; border-radius: 50%; margin-left:80px;">
                     <div class="card-body">
-                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Name:  <%=doctor.name%></p>  
-                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Specialization:  <%=doctor.specialization%></p>  
-                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2">Patients:  <%=doctor.Max_no_of_patient%></p>
-                      <button class="btn btn-primary btn-sm btn-user"><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Delete</a></button>
-                      <button class="btn btn-primary btn-sm btn-user"><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Update</a></button>
+                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2; margin-left:60px;">Name: <%=doctor.name%></p>  
+                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2; margin-left:60px;">Specialization: <%=doctor.specialization%></p>  
+                      <p class="card-text" style="font-size:17.5px; align-items: center; justify-items:center; justify-content: center; color:#6249F2; margin-left:60px;">Patients: <%=doctor.Max_no_of_patient%></p>
+                      <!-- <button class="btn btn-primary btn-sm btn-user"><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Delete</a></button> -->
+                      <!-- <button class="btn btn-primary btn-sm btn-user"><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Update</a></button> -->
                     </div>
                   </div>
               </div>

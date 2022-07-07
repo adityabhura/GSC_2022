@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 const hospital = require("../models/hospital.js");
 const patient = require("../models/patient.js");
 const Doctor = require("../models/doctor.js");
-// const record = require("../models/record.js");
+const upload = require("../utils/multer");
+const cloudinary = require("../utils/cloudinary");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -17,7 +18,7 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET
 });
 
-
+var multipleUpload = upload.fields([{name:'image', maxCount:1}]);
 const { findById, db } = require("../models/hospital.js");
 const doctor = require("../models/doctor.js");
 
@@ -65,9 +66,10 @@ router.get("/hospitalRegister", (req, res) => {
   res.render("hospitalRegister");
 });
 
-router.post("/hospitalRegister", (req, res) => {
-  let { name, email, address,city,state,pin, password, confirmPassword } = req.body;
-  if (!name || !email || !password || !confirmPassword || !address || !city || !state || !pin) {
+router.post("/hospitalRegister", multipleUpload,async(req, res) => {
+  const result = await cloudinary.uploader.upload(req.files['image'][0].path);
+  let { name, email, address,city,phone,state,password, confirmPassword } = req.body;
+  if (!name || !email || !password || !confirmPassword || !address || !city || !state || !phone) {
     err = "Please fill all the fields";
     res.render("hospitalRegister", { err: err });
   }
@@ -80,12 +82,12 @@ router.post("/hospitalRegister", (req, res) => {
       password: password,
       address:address,
       city:city,
-      state:state,
-      pin:pin
+      phone:phone,
+      state:state
     });
   }
   if (typeof err == "undefined") {
-    hospital.findOne({ email: email }, function (err, data) {
+    hospital.findOne({ email: email }, async(err, data)=> {
       if (err) throw err;
       if (data) {
         err = "Hospital already registered";
@@ -93,22 +95,39 @@ router.post("/hospitalRegister", (req, res) => {
       } else {
         bcrypt.genSalt(10, (err, salt) => {
           if (err) throw err;
-          bcrypt.hash(password, salt, (err, hash) => {
+          bcrypt.hash(password, salt, async(err, hash) => {
             if (err) throw err;
             password = hash;
-            hospital({
-              name,
-              email,
-              password,
-              address,
-              city,
-              state,
-              pin
-            }).save((err, data) => {
-              if (err) throw err;
-              req.flash("success_message", "Please Login to Continue");
+            let hosp = new hospital({
+              name:name,
+              email: email,
+              address: address,
+              city: city,
+              phone: phone,
+              state: state,
+              password: password,
+              confirmPassword: confirmPassword,
+              image: result.secure_url
+            });
+
+            await hosp.save((err,data)=>{
+              if(err) console.log(err);
+              req.flash("success_message","Please login to continue");
               res.redirect("/hospitallogin");
             });
+            // hospital({
+            //   name,
+            //   email,
+            //   password,
+            //   address,
+            //   city,
+            //   state,
+            //   pin
+            // }).save((err, data) => {
+            //   if (err) throw err;
+            //   req.flash("success_message", "Please Login to Continue");
+            //   res.redirect("/hospitallogin");
+            // });
           });
         });
       }
@@ -143,8 +162,8 @@ router.get("/patientRegister", (req, res) => {
 });
 
 router.post("/patientRegister", (req, res) => {
-  let { name, email, address,city,state,pin, password, confirmPassword } = req.body;
-  if (!name || !email || !password || !confirmPassword || !address || !city || !state || !pin) {
+  let { name, email, address,city,state,password, confirmPassword } = req.body;
+  if (!name || !email || !password || !confirmPassword || !address || !city || !state) {
     err = "Please fill all the fields";
     res.render("patientRegister", { err: err });
   }
@@ -157,8 +176,7 @@ router.post("/patientRegister", (req, res) => {
       password: password,
       address:address,
       city:city,
-      state:state,
-      pin:pin
+      state:state
     });
   }
   if (typeof err == "undefined") {
@@ -179,8 +197,7 @@ router.post("/patientRegister", (req, res) => {
               password,
               address,
               city,
-              state,
-              pin
+              state
             }).save((err, data) => {
               if (err) throw err;
               req.flash("success_message", "Please Login to Continue");
@@ -213,7 +230,7 @@ passport.use(
   })
 );
 
-router.get("/patientlogin", (req, res) => {
+router.get("/patientLogin", (req, res) => {
   res.render("patientLogin");
 });
 
@@ -224,6 +241,14 @@ router.post("/patientLogin", (req, res, next) => {
     failureFlash: true,
   })(req, res, next);
 });
+
+router.get('/patientLogout',(req,res,next)=>{
+  req.logout(req.user,err=>{
+    if(err) return next(err);
+    res.redirect('/patientLogin');
+  });
+  
+})
 
 router.get("/patientDashboard", (req, res) => {
   console.log(req.user.city + " got")
@@ -252,9 +277,6 @@ router.get("/patient_bookings/:user_id",(req,res)=>{
   })
 })
 
-
-/*=======Patient Login End=========*/
-
 passport.serializeUser(function (user, cb) {
   cb(null, user.id);
 });
@@ -276,7 +298,8 @@ router.get("/c",(req,res)=>{
   res.send("Success");
 })
 
-router.get("/hospitallogin", (req, res) => {
+/*=======Patient Login End=========*/
+router.get("/hospitalLogin", (req, res) => {
   res.render("hospitalLogin");
 });
 
@@ -289,8 +312,11 @@ router.post("/hospitalLogin", (req, res, next) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/hospitalLogin");
+  req.logout(req.user,err=>{
+    if(err) return next(err);
+    res.redirect("/hospitalLogin");
+  });
+  
 });
 
 router.get("/hospitalDashboard", ensureAuthenticated, (req, res) => {
@@ -343,37 +369,55 @@ router.get("/doctor/add/:id", ensureAuthenticated, (req, res) => {
   res.render("addDoctor", { user: req.user });
 });
 
-router.post("/add/:id", ensureAuthenticated, async (req, res) => {
-  const reg = req.body.registration;
+router.post("/add/:id", ensureAuthenticated,multipleUpload, async(req, res) => {
+  const result = await cloudinary.uploader.upload(req.files['image'][0].path);
+  const fee = req.body.fee;
   const name = req.body.name;
   const spec = req.body.specialization;
   const patient_no = req.body.max_patient_no;
   console.log(req.body);
 
-  hospital.findById(req.params.id, (err, hospital) => {
+  hospital.findById(req.params.id, async(err, hospital) => {
     if (err) throw err;
     else {
-      Doctor.create(
-        {
-          registration: reg,
+      let doct = new Doctor({
           name: name,
           specialization: spec,
+          fee: fee,
           Max_no_of_patient: patient_no,
-          hospital:req.params.id
-        },
-        (err, data) => {
-          if (err) throw err;
-          else {
+          hospital:req.params.id,
+          image:result.secure_url
+      });
+      await doct.save((err,data)=>{
+        if(err) console.log(err);
+        else{
             console.log(data);
             hospital.doctors.push(data);
             hospital.save();
-          }
-          // if(data){
-          //     err ='Doctor already registered';
-          //     res.render('addDoctor');
-          // }
         }
-      );
+      })
+      // Doctor.create(
+      //   {
+      //     registration: reg,
+      //     name: name,
+      //     specialization: spec,
+      //     Max_no_of_patient: patient_no,
+      //     hospital:req.params.id,
+      //     image:result.secure_url
+      //   },
+      //   (err, data) => {
+      //     if (err) throw err;
+      //     else {
+      //       console.log(data);
+      //       hospital.doctors.push(data);
+      //       hospital.save();
+      //     }
+      //     // if(data){
+      //     //     err ='Doctor already registered';
+      //     //     res.render('addDoctor');
+      //     // }
+      //   }
+      // );
     }
   });
 

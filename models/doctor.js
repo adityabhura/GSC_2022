@@ -8,12 +8,12 @@ const doctorSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Hospital"
   },
+  image:{
+    type: String,
+  },
   specialization: {
     type: String,
     required: true,
-  },
-  registration: {
-    type: String,
   },
   Max_no_of_patient: {
     type: Number,
@@ -22,6 +22,9 @@ const doctorSchema = new mongoose.Schema({
   count_of_patient:{
     type: Number,
     default:0
+  },
+  fee:{
+    type: Number
   },
   check_max_patient:{
     type:Boolean,

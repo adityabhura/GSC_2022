@@ -11369,7 +11369,7 @@ form.user .form-control-user {
                       <h3 class="h5 text-gray-900 mb-4">Add New Doctor</h3>
                     </div>
                     <hr>
-                    <form action="/add/<%=user._id%>" method="POST"  class="user">
+                    <form action="/add/<%=user._id%>" method="POST"  class="user" enctype="multipart/form-data">
                       <% if(typeof err != 'undefined'){%>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                           <span style="font-weight:300; font-size:15px"><%=err%></span>
@@ -11385,12 +11385,17 @@ form.user .form-control-user {
                           aria-describedby="emailHelp" required placeholder="specialization">
                       </div>
                       <div class="form-group">
-                        <input type="text" class="form-control form-control-user" name="registration" id="exampleInputEmail" value="<%= typeof name != 'undefined' ? name : '' %>"
-                          aria-describedby="emailHelp" required placeholder="License Number">
+                        <input type="text" class="form-control form-control-user" name="fee" id="exampleInputEmail" value="<%= typeof name != 'undefined' ? name : '' %>"
+                          aria-describedby="emailHelp" required placeholder="Fee">
                       </div>
                        <div class="form-group">
                         <input type="text" class="form-control form-control-user" name="max_patient_no" id="exampleInputEmail" value="<%= typeof name != 'undefined' ? name : '' %>"
                           aria-describedby="emailHelp" required placeholder="Maximum patient Number">
+                      </div>
+                      <div class="form-group">
+                        <label for="coverPage" class="form-control-upload">Upload DP of Doctor</label>
+                        <input type="file" class="form-control form-control-upload" name="image" required
+                          placeholder="Display Picture of Doctor">
                       </div>
                       <button type="submit" class="btn btn-primary btn-user btn-block">
                         Add Doctor

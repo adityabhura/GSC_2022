@@ -19,10 +19,11 @@ const hospitalSchema = new mongoose.Schema({
         type: String,
         required: true
       },
-      
-      pin : {
+      phone:{
         type: Number,
-        required: true
+      },
+      image: {
+        type: String,
       },
 
     email : {
