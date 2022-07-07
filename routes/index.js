@@ -18,7 +18,7 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET
 });
 
-var multipleUpload = upload.fields([{name:'image', maxCount:1}]);
+var multipleUpload = upload.fields([{ name: 'image', maxCount: 1 }]);
 const { findById, db } = require("../models/hospital.js");
 const doctor = require("../models/doctor.js");
 
@@ -58,7 +58,7 @@ router.use(bodyParser.json());
 router.use(express.json());
 router.use(express.urlencoded());
 
-router.get("/",(req,res)=>{
+router.get("/", (req, res) => {
   res.render("landingPage");
 });
 
@@ -66,9 +66,9 @@ router.get("/hospitalRegister", (req, res) => {
   res.render("hospitalRegister");
 });
 
-router.post("/hospitalRegister", multipleUpload,async(req, res) => {
+router.post("/hospitalRegister", multipleUpload, async (req, res) => {
   const result = await cloudinary.uploader.upload(req.files['image'][0].path);
-  let { name, email, address,city,phone,state,password, confirmPassword } = req.body;
+  let { name, email, address, city, phone, state, password, confirmPassword } = req.body;
   if (!name || !email || !password || !confirmPassword || !address || !city || !state || !phone) {
     err = "Please fill all the fields";
     res.render("hospitalRegister", { err: err });
@@ -80,14 +80,14 @@ router.post("/hospitalRegister", multipleUpload,async(req, res) => {
       email: email,
       name: name,
       password: password,
-      address:address,
-      city:city,
-      phone:phone,
-      state:state
+      address: address,
+      city: city,
+      phone: phone,
+      state: state
     });
   }
   if (typeof err == "undefined") {
-    hospital.findOne({ email: email }, async(err, data)=> {
+    hospital.findOne({ email: email }, async (err, data) => {
       if (err) throw err;
       if (data) {
         err = "Hospital already registered";
@@ -95,11 +95,11 @@ router.post("/hospitalRegister", multipleUpload,async(req, res) => {
       } else {
         bcrypt.genSalt(10, (err, salt) => {
           if (err) throw err;
-          bcrypt.hash(password, salt, async(err, hash) => {
+          bcrypt.hash(password, salt, async (err, hash) => {
             if (err) throw err;
             password = hash;
             let hosp = new hospital({
-              name:name,
+              name: name,
               email: email,
               address: address,
               city: city,
@@ -110,9 +110,9 @@ router.post("/hospitalRegister", multipleUpload,async(req, res) => {
               image: result.secure_url
             });
 
-            await hosp.save((err,data)=>{
-              if(err) console.log(err);
-              req.flash("success_message","Please login to continue");
+            await hosp.save((err, data) => {
+              if (err) console.log(err);
+              req.flash("success_message", "Please login to continue");
               res.redirect("/hospitallogin");
             });
             // hospital({
@@ -162,7 +162,7 @@ router.get("/patientRegister", (req, res) => {
 });
 
 router.post("/patientRegister", (req, res) => {
-  let { name, email, address,city,state,password, confirmPassword } = req.body;
+  let { name, email, address, city, state, password, confirmPassword } = req.body;
   if (!name || !email || !password || !confirmPassword || !address || !city || !state) {
     err = "Please fill all the fields";
     res.render("patientRegister", { err: err });
@@ -174,9 +174,9 @@ router.post("/patientRegister", (req, res) => {
       email: email,
       name: name,
       password: password,
-      address:address,
-      city:city,
-      state:state
+      address: address,
+      city: city,
+      state: state
     });
   }
   if (typeof err == "undefined") {
@@ -242,12 +242,12 @@ router.post("/patientLogin", (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/patientLogout',(req,res,next)=>{
-  req.logout(req.user,err=>{
-    if(err) return next(err);
-    res.redirect('/patientLogin');
+router.get('/patientLogout', (req, res, next) => {
+  req.logout(req.user, err => {
+    if (err) return next(err);
+    res.redirect('/');
   });
-  
+
 })
 
 router.get("/patientDashboard", (req, res) => {
@@ -258,22 +258,22 @@ router.get("/patientDashboard", (req, res) => {
   //   console.log(data);
   //   res.render("patientDashboard",{hospitals:data});
   // })
-  hospital.find({city:req.user.city}).populate({path:"doctors",model:Doctor}).exec(function(err,data){
-    if(err)res.send(err);
-    else{
+  hospital.find({ city: req.user.city }).populate({ path: "doctors", model: Doctor }).exec(function (err, data) {
+    if (err) res.send(err);
+    else {
       console.log(data);
       //res.send(data);
-      res.render("patientDashboard",{hospitals:data,user:req.user});
+      res.render("patientDashboard", { hospitals: data, user: req.user });
     }
   })
- 
+
 });
 
-router.get("/patient_bookings/:user_id",(req,res)=>{
-  patient.findById(req.params.user_id).populate({path:"booking_info.doctor_info",model:Doctor,populate:{path:"hospital",model:hospital}}).exec((err,patient)=>{
-    if(err)console.log(err);
+router.get("/patient_bookings/:user_id", (req, res) => {
+  patient.findById(req.params.user_id).populate({ path: "booking_info.doctor_info", model: Doctor, populate: { path: "hospital", model: hospital } }).exec((err, patient) => {
+    if (err) console.log(err);
     console.log(patient);
-    res.render("patient_bookings",{patient:patient});
+    res.render("patient_bookings", { patient: patient });
   })
 })
 
@@ -285,16 +285,16 @@ passport.deserializeUser(function (id, cb) {
   hospital.findById(id, function (err, user) {
     if (err) cb(err);
     if (user) cb(null, user);
-    else{
-        patient.findById(id, function(err,user){
-            if(err) cb(err);
-            cb(null,user);
-        })
+    else {
+      patient.findById(id, function (err, user) {
+        if (err) cb(err);
+        cb(null, user);
+      })
     }
   });
 });
 
-router.get("/c",(req,res)=>{
+router.get("/c", (req, res) => {
   res.send("Success");
 })
 
@@ -312,11 +312,11 @@ router.post("/hospitalLogin", (req, res, next) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.logout(req.user,err=>{
-    if(err) return next(err);
-    res.redirect("/hospitalLogin");
+  req.logout(req.user, err => {
+    if (err) return next(err);
+    res.redirect("/");
   });
-  
+
 });
 
 router.get("/hospitalDashboard", ensureAuthenticated, (req, res) => {
@@ -343,11 +343,11 @@ router.get("/hospitalDashboard", ensureAuthenticated, (req, res) => {
   // console.log(req.user);
 });
 
-router.get("/hospital_booking",(req,res)=>{
-  hospital.findById(req.user._id).populate({path:"doctors",model:Doctor,populate:{path:"booked_info.patient_info",model:patient}}).exec(function(err,data){
-    if(err)console.log(err);
-    else{
-      res.render("hospital_booking",{data:data});
+router.get("/hospital_booking", (req, res) => {
+  hospital.findById(req.user._id).populate({ path: "doctors", model: Doctor, populate: { path: "booked_info.patient_info", model: patient } }).exec(function (err, data) {
+    if (err) console.log(err);
+    else {
+      res.render("hospital_booking", { data: data });
     }
   })
 })
@@ -369,7 +369,7 @@ router.get("/doctor/add/:id", ensureAuthenticated, (req, res) => {
   res.render("addDoctor", { user: req.user });
 });
 
-router.post("/add/:id", ensureAuthenticated,multipleUpload, async(req, res) => {
+router.post("/add/:id", ensureAuthenticated, multipleUpload, async (req, res) => {
   const result = await cloudinary.uploader.upload(req.files['image'][0].path);
   const fee = req.body.fee;
   const name = req.body.name;
@@ -377,23 +377,23 @@ router.post("/add/:id", ensureAuthenticated,multipleUpload, async(req, res) => {
   const patient_no = req.body.max_patient_no;
   console.log(req.body);
 
-  hospital.findById(req.params.id, async(err, hospital) => {
+  hospital.findById(req.params.id, async (err, hospital) => {
     if (err) throw err;
     else {
       let doct = new Doctor({
-          name: name,
-          specialization: spec,
-          fee: fee,
-          Max_no_of_patient: patient_no,
-          hospital:req.params.id,
-          image:result.secure_url
+        name: name,
+        specialization: spec,
+        fee: fee,
+        Max_no_of_patient: patient_no,
+        hospital: req.params.id,
+        image: result.secure_url
       });
-      await doct.save((err,data)=>{
-        if(err) console.log(err);
-        else{
-            console.log(data);
-            hospital.doctors.push(data);
-            hospital.save();
+      await doct.save((err, data) => {
+        if (err) console.log(err);
+        else {
+          console.log(data);
+          hospital.doctors.push(data);
+          hospital.save();
         }
       })
       // Doctor.create(
@@ -421,78 +421,78 @@ router.post("/add/:id", ensureAuthenticated,multipleUpload, async(req, res) => {
     }
   });
 
- // hos.doctors.push(doc._id);
+  // hos.doctors.push(doc._id);
   res.redirect("/hospitalDashboard");
 });
 
-router.post("/book",check,addDataToPatient,(req,res)=>{
+router.post("/book", check, addDataToPatient, (req, res) => {
   // res.send(req.query.doctor_id);
-  var patient_id=req.query.patient_id;
-  var booking_date = new Date(); 
-  var d = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); 
-  var visiting_date =d.getDate()+'/'+(d.getMonth()+1)+'/'+ d.getFullYear();
-  doctor.findById(req.query.doctor_id,(err,doctor)=>{
-    var obj={
-      visiting_date:visiting_date,
-      booking_date:booking_date,
-      patient_info:patient_id
+  var patient_id = req.query.patient_id;
+  var booking_date = new Date();
+  var d = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+  var visiting_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+  doctor.findById(req.query.doctor_id, (err, doctor) => {
+    var obj = {
+      visiting_date: visiting_date,
+      booking_date: booking_date,
+      patient_info: patient_id
     }
     doctor.booked_info.push(obj);
     doctor.count_of_patient++;
     doctor.save();
   });
-  patient.findById(patient_id).populate({path:"booking_info.doctor_info",model:Doctor,populate:{path:"hospital",model:hospital}}).exec((err,patient)=>{
-    if(err)console.log(err);
+  patient.findById(patient_id).populate({ path: "booking_info.doctor_info", model: Doctor, populate: { path: "hospital", model: hospital } }).exec((err, patient) => {
+    if (err) console.log(err);
     console.log(patient);
-    res.render("patient_bookings",{patient:patient});
+    res.render("patient_bookings", { patient: patient });
   })
-  
+
 })
 
-router.post('/createOrder/:amt',(req,res)=>{
+router.post('/createOrder/:amt', (req, res) => {
   let options = {
-      amount: req.params.amt*100,
-      currency : "INR",
+    amount: req.params.amt * 100,
+    currency: "INR",
   }
-  razorpay.orders.create(options, (err,order)=>{
-      console.log(order);
-      res.json(order);
+  razorpay.orders.create(options, (err, order) => {
+    console.log(order);
+    res.json(order);
   })
 });
 
-router.post('/isComplete/:doctorid/:hospitalid/:patientid', check,addDataToPatient,(req,res)=>{
-razorpay.payments.fetch(req.body.razorpay_payment_id).then((doc)=>{
-    if(doc.status=='captured'){
-      var patient_id=req.params.patientid;
-  var booking_date = new Date(); 
-  var d = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); 
-  var visiting_date =d.getDate()+'/'+(d.getMonth()+1)+'/'+ d.getFullYear();
-  doctor.findById(req.params.doctorid,(err,doctor)=>{
-    var obj={
-      visiting_date:visiting_date,
-      booking_date:booking_date,
-      patient_info:patient_id
+router.post('/isComplete/:doctorid/:hospitalid/:patientid', check, addDataToPatient, (req, res) => {
+  razorpay.payments.fetch(req.body.razorpay_payment_id).then((doc) => {
+    if (doc.status == 'captured') {
+      var patient_id = req.params.patientid;
+      var booking_date = new Date();
+      var d = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+      var visiting_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+      doctor.findById(req.params.doctorid, (err, doctor) => {
+        var obj = {
+          visiting_date: visiting_date,
+          booking_date: booking_date,
+          patient_info: patient_id
+        }
+        doctor.booked_info.push(obj);
+        doctor.count_of_patient++;
+        doctor.save();
+      });
+      patient.findById(patient_id).populate({ path: "booking_info.doctor_info", model: Doctor, populate: { path: "hospital", model: hospital } }).exec((err, patient) => {
+        if (err) console.log(err);
+        console.log(patient);
+        res.render("patient_bookings", { patient: patient });
+      })
     }
-    doctor.booked_info.push(obj);
-    doctor.count_of_patient++;
-    doctor.save();
   });
-  patient.findById(patient_id).populate({path:"booking_info.doctor_info",model:Doctor,populate:{path:"hospital",model:hospital}}).exec((err,patient)=>{
-    if(err)console.log(err);
-    console.log(patient);
-    res.render("patient_bookings",{patient:patient});
-  })
-    }
-});
 
 })
 
-router.get("/test",function(req,res){
+router.get("/test", function (req, res) {
 
-  hospital.findById(req.user._id).populate({path:"doctors",model:Doctor}).exec(function(err,data){
-    if(err)res.send(err);
-    else{
-      res.render("test",{data:data});
+  hospital.findById(req.user._id).populate({ path: "doctors", model: Doctor }).exec(function (err, data) {
+    if (err) res.send(err);
+    else {
+      res.render("test", { data: data });
     }
   })
 })
@@ -512,34 +512,34 @@ router.get("/test",function(req,res){
 //   })
 // }, 60000);
 
-function help(){
+function help() {
   console.log("hello");
 }
 
-function check(req,res,next){
-  doctor.findById(req.params.doctorid,(err,doctor)=>{
-    if(err)res.send(err);
-    if(doctor.count_of_patient===doctor.Max_no_of_patient){
+function check(req, res, next) {
+  doctor.findById(req.params.doctorid, (err, doctor) => {
+    if (err) res.send(err);
+    if (doctor.count_of_patient === doctor.Max_no_of_patient) {
       res.send("Aukad se bahar hogaya");
-      doctor.check_max_patient=true;
+      doctor.check_max_patient = true;
       doctor.save();
     }
     else next();
   })
 }
 
-function addDataToPatient(req,res,next){
-  var doctor_id=req.params.doctorid;
-  var booking_date = new Date(); 
-  var d = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); 
-  var visiting_date =d.getDate()+'/'+(d.getMonth()+1)+'/'+ d.getFullYear();
-  patient.findById(req.params.patientid,(err,patient)=>{
-    if(err)res.send(err);
-    else{
-      var obj={
-        visiting_date:visiting_date,
-        booking_date:booking_date,
-        doctor_info:doctor_id
+function addDataToPatient(req, res, next) {
+  var doctor_id = req.params.doctorid;
+  var booking_date = new Date();
+  var d = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+  var visiting_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+  patient.findById(req.params.patientid, (err, patient) => {
+    if (err) res.send(err);
+    else {
+      var obj = {
+        visiting_date: visiting_date,
+        booking_date: booking_date,
+        doctor_info: doctor_id
       }
       patient.booking_info.push(obj);
       patient.save();
@@ -550,13 +550,13 @@ function addDataToPatient(req,res,next){
 }
 
 
-router.get("/doctor/view/:id",(req,res)=>{
-  hospital.findById(req.params.id).populate({path:"doctors",model:Doctor}).exec(function(err,data){
-    if(err)res.send(err);
-    else{
+router.get("/doctor/view/:id", (req, res) => {
+  hospital.findById(req.params.id).populate({ path: "doctors", model: Doctor }).exec(function (err, data) {
+    if (err) res.send(err);
+    else {
       console.log(data);
       //res.send(data);
-      res.render("viewDoctor",{hospitals:data,user:req.user});
+      res.render("viewDoctor", { hospitals: data, user: req.user });
     }
   })
 });
