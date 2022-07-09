@@ -4,6 +4,10 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  time:{
+    type: String,
+    required: true,
+  },
   hospital:{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Hospital"

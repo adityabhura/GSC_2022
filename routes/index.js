@@ -375,6 +375,7 @@ router.post("/add/:id", ensureAuthenticated, multipleUpload, async (req, res) =>
   const name = req.body.name;
   const spec = req.body.specialization;
   const patient_no = req.body.max_patient_no;
+  const time=req.body.start_time+" to "+req.body.end_time;
   console.log(req.body);
 
   hospital.findById(req.params.id, async (err, hospital) => {
@@ -386,7 +387,8 @@ router.post("/add/:id", ensureAuthenticated, multipleUpload, async (req, res) =>
         fee: fee,
         Max_no_of_patient: patient_no,
         hospital: req.params.id,
-        image: result.secure_url
+        image: result.secure_url,
+        time:time
       });
       await doct.save((err, data) => {
         if (err) console.log(err);
